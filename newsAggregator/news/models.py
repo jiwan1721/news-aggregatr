@@ -1,5 +1,4 @@
-from decimal import MAX_EMAX
-from pyexpat import model
+
 from django.db import models
 
 # Create your models here.
@@ -10,9 +9,10 @@ class NewsAggre(models.Model):
         ('H','Health'),
     )
 
-    news_headline = models.CharField(max_length=300,unique=True)
-    href_link = models.URLField(max_length=300)
+    news_headline = models.CharField(max_length=300)
+    href_link = models.URLField(unique=True,max_length=300)
+    image_link = models.URLField(max_length=300)
     news_category = models.CharField(max_length=1,choices=NEWS_CATEGORY)
 
     def __str__(self):
-        return self.news_headlines
+        return self.news_headline

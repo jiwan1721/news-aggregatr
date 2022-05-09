@@ -1,9 +1,9 @@
-from unicodedata import category
 from django.shortcuts import render
 import requests
 from bs4 import BeautifulSoup
 from news.models import *
 import re
+from . import cron
 # Create your views here.
 # r = requests.get("https://ekantipur.com/sports")
 
@@ -25,7 +25,9 @@ import re
 #     print(n.text)
 r1 = requests.get("https://kathmandupost.com/")
 soup1 = BeautifulSoup(r1.content,'html5lib')
-newh2 = soup1.findAll('h3')
+newh2 = soup1.find_all('h3')
+
+
 # newh2 = newh2[0:12]
 enews = []
 for n1 in newh2:
@@ -34,16 +36,18 @@ for n1 in newh2:
 
 ekantipur = requests.get("https://ekantipur.com/")
 ekantipur_soup = BeautifulSoup(ekantipur.content,'html.parser')
-news_ekantpur = ekantipur_soup.find_all('h1')
+# import ipdb;ipdb.set_trace()
+news_ekantpur = ekantipur_soup.find_all('article')
 # a_href=ekantipur_soup.find_all("a").get("href")
 ekantipur_news = []
 all_link = set()
-for n in news_ekantpur:
-    link = n.get('href')
-    ekantipur_news.append(n.text)
+# for n in news_ekantpur:
+    # print(news_ekantpur)
+    # print(n.h2)
+    # link = n.a['href']
+    # ekantipur_news.append(n.text)
     
-    all_link.add(link)
-    print(all_link)
+    # all_link.add(link)
     # if(n.get('href')!='#'):
     #     link_text = ("https://ekantipur.com/"+n.get('href'))
     #     all_link.add(link_text)
@@ -54,17 +58,33 @@ url = "https://www.nepalnews.com/s/politics"
 request_news= requests.get(url)
 html_news = request_news.content
 news_soup = BeautifulSoup(html_news,'html.parser')
-news_scrap = news_soup.find_all('div',{'class':'uk-first-column'})[0:10]
-for link in news_scrap:
+news_scrap = news_soup.find_all('div',class_ = 'uk-grid-margin uk-first-column')
+# for link in news_scrap:
+#     aggre = NewsAggre()
+#     aggre.news_headline =  link.a.text
+#     aggre.news_image = link.img['src']
+#     aggre.href_link = link.a['href']
+#     aggre.news_category='P'
+#     # data = NewsAggre.objects.filter(category='P').filter(news_headline =aggre.news_headline)
+#     aggre.save()
+
+r = requests.get("https://kathmandupost.com/")
+soup = BeautifulSoup(r.content,'html.parser')
+article =soup.find_all('article')
+for content in article[:5]:
     aggre = NewsAggre()
-    aggre.news_headline =  link.findChildren()[7].text
-    aggre.news_image = link.findChildren()[5].get('src')
-    aggre.href_link = link.findChildren()[4].get('href')
-    aggre.news_category='P'
-    data = NewsAggre.objects.filter(category='P').filter(news_headline =aggre.news_headline)
-    if len(data)==0:
-        aggre.save()
-    print(link.findChildren()[5].text)
+    aggre.news_headline =  content.a.text
+    url = content.img["data-src"]
+    aggre.image_link = url
+    aggre.href_link = "https://kathmandupost.com/"+content.a["href"]
+    aggre.news_category="P"
+    data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
+    aggre.save()
+ 
+    # print('href------>',content.a['href'])
+    # print('img--->',content.p.text)
+    # print('figure---',content.img['data-src'])
+
 
 
 def index(request):

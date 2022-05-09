@@ -1,5 +1,5 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import *
+from news.models import *
 admin.site.register(NewsAggre)
