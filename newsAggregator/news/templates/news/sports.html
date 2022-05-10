@@ -1,0 +1,18 @@
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> 
+</head>
+{% include 'news/navbar.html' %}
+{% block content %}
+<div>
+    {% for x in sports_news %}
+    <a class="sports-news" href="{{x.href_link}}"><br>
+    <h3>{{x.news_headline}}</h3>
+    <img src="{{x.image_link}}" alt="#">
+    </a>
+       
+        <p>{{x.news_descriptions}}</p>
+        news category : {{x.news_category}}
+    {% endfor %}
+</div>
+{% endblock %}

@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django_crontab',
     'crispy_forms',
 ]
+CRONJOBS = [
+    ('*/10 * * * *','news.cron.my_corn_job')
+]
 CRISPY_TEMPLATE_PACK= 'uni_form'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,6 +129,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CRONJOBS = [
-    ('*/2 * * * *','news.cron.my_corn_job')
-]

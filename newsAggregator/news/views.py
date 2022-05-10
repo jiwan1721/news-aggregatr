@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 import requests
 from bs4 import BeautifulSoup
-from news.models import *
+from news.aggregator import *
 from .form import NewUserForm
 import re
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from . import cron
+from . import utils
 # Create your views here.
 # r = requests.get("https://ekantipur.com/sports")
 
@@ -71,17 +72,19 @@ news_scrap = news_soup.find_all('div',class_ = 'uk-grid-margin uk-first-column')
 #     # data = NewsAggre.objects.filter(category='P').filter(news_headline =aggre.news_headline)
 #     aggre.save()
 
-r = requests.get("https://kathmandupost.com/")
+r = requests.get("https://kathmandupost.com/politics")
 soup = BeautifulSoup(r.content,'html.parser')
 article =soup.find_all('article')
-for content in article[:5]:
-    aggre = NewsAggre()
-    aggre.news_headline =  content.a.text
-    url = content.img["data-src"]
-    aggre.image_link = url
-    aggre.href_link = "https://kathmandupost.com"+content.a["href"]
-    aggre.news_category="P"
-    data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
+url_host = utils.get_host_name("https://kathmandupost.com/politics")
+# for content in article[:5]:
+#     aggre = NewsAggre()
+#     aggre.news_headline =  content.h3.text
+#     url = content.img["data-src"]
+#     aggre.image_link = url
+    
+#     aggre.href_link = url_host + content.a["href"]
+#     aggre.news_category="P"
+#     data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
 #     aggre.save()
  
     # print('href------>',content.a['href'])
@@ -90,8 +93,7 @@ for content in article[:5]:
 
 
 
-def index(request):
-    return render(request,'news/index.html',{'e_news':enews,'ekantipur_news':all_link})
+
 
 # news':news_set
 
@@ -135,3 +137,27 @@ def logout_request(request):
     logout(request)
     messages.info(request, "You have successfully logged out.") 
     return redirect("main:homepage")
+
+def index(request):
+    data_politics = NewsAggre.objects.all().filter(news_category="P")
+    data_health = NewsAggre.objects.all().filter(news_category="H")
+    data_sports = NewsAggre.objects.all().filter(news_category="S")
+    return render(request,'news/index.html',{
+        'politics':data_politics,
+        'health':data_health,
+        'sports': data_sports
+                                             
+        })
+
+def politics_news(request):
+    data = NewsAggre.objects.all().filter(news_category="P")
+    
+    return render(request, "news/political.html",{'political_news':data})
+
+def sports_news(request):
+    data = NewsAggre.objects.all().filter(news_category="S")
+    return render(request, "news/sports.html",{'sports_news':data})
+
+def health_news(request):
+    data = NewsAggre.objects.all().filter(news_category="H")
+    return render(request, 'news/health.html',{'health_news':data})
