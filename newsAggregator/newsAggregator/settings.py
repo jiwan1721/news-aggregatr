@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news',
     'django_crontab',
+    'crispy_forms',
 ]
-
+CRISPY_TEMPLATE_PACK= 'uni_form'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,5 +127,5 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRONJOBS = [
-    ('*/2 * * * *','news.cron.ny_corn_job')
+    ('*/2 * * * *','news.cron.my_corn_job')
 ]

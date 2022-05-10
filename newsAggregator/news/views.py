@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import requests
 from bs4 import BeautifulSoup
 from news.models import *
+from .form import NewUserForm
 import re
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from . import cron
 # Create your views here.
 # r = requests.get("https://ekantipur.com/sports")
@@ -76,10 +79,10 @@ for content in article[:5]:
     aggre.news_headline =  content.a.text
     url = content.img["data-src"]
     aggre.image_link = url
-    aggre.href_link = "https://kathmandupost.com/"+content.a["href"]
+    aggre.href_link = "https://kathmandupost.com"+content.a["href"]
     aggre.news_category="P"
     data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
-    aggre.save()
+#     aggre.save()
  
     # print('href------>',content.a['href'])
     # print('img--->',content.p.text)
@@ -91,3 +94,44 @@ def index(request):
     return render(request,'news/index.html',{'e_news':enews,'ekantipur_news':all_link})
 
 # news':news_set
+
+from .form import NewUserForm
+from django.contrib.auth import login
+from django.contrib import messages
+
+def register_request(request):
+	if request.method == "POST":
+		form = NewUserForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect("main:homepage")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = NewUserForm()
+	return render (request=request, template_name="news/register.html", context={"register_form":form})
+
+
+def login_request(request):
+	if request.method == "POST":
+		form = AuthenticationForm(request, data=request.POST)
+		if form.is_valid():
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password')
+			user = authenticate(username=username, password=password)
+			if user is not None:
+				login(request, user)
+				messages.info(request, f"You are now logged in as {username}.")
+				return redirect("main:homepage")
+			else:
+				messages.error(request,"Invalid username or password.")
+		else:
+			messages.error(request,"Invalid username or password.")
+	form = AuthenticationForm()
+	return render(request=request, template_name="news/login.html", context={"login_form":form})
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.") 
+    return redirect("main:homepage")
