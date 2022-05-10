@@ -3,7 +3,9 @@
 
 <head>
     <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% include 'news/navbar.html' %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% include 'news/navbar.html' %} {% load static %}
+
+    <script src="{% static 'js/see_more.js' %}"></script>
 </head>
 
 <body>
@@ -14,45 +16,85 @@
             </form>
         </center>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <h3 class="text-centre">Politics news</h3>
-                {% for data in politics %}
-                <h5>
-                    <a class="ekantput"><a class="ekanti" href="{{data.href_link}}">- {{data.news_headline}} <br>
-                        <img src="{{data.image_link}}" alt="#">
-                    </a></h5>
-                    <p>{{data.news_descriptions}}</p>
-                
+    <h3 class="text-centre">Politics news</h3>
+    <main>
+
+        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                {% for x in politics %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="width: 18rem;">
+
+                        <a class="sports-news" href="{{x.href_link}}"><br>
+                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                            <h5 class="card-title">{{x.news_headline}}</h5>
+                        </a>
+                        <div class="card-body">
+
+                            <p class="card-text">{{x.news_descriptions}}</p>
+
+                        </div><br>
+                    </div>
+                </div>
                 {% endfor %}
-                <br>
-            </div>
-            <div class="col-6">
-                <h3 class="text-centre">health news</h3>
-                {% for data in health %}
-                <h5>
-                    <a class="ekantput"><a class="ekanti" href="{{data.href_link}}">- {{data.news_headline}} <br>
-                        <img src="{{data.image_link}}" alt="#">
-                    </a></h5>
-                    <p>{{data.news_descriptions}}</p>
-                
-                {% endfor %}
-                <br>
-            </div>
-            <div class="col-6">
-                <h3 class="text-centre">Sports news</h3>
-                {% for data in sports %}
-                <h5>
-                    <a class="ekantput"><a class="ekanti" href="{{data.href_link}}">- {{data.news_headline}} <br>
-                        <img src="{{data.image_link}}" alt="#">
-                    </a></h5>
-                    <p>{{data.news_descriptions}}</p>
-                
-                {% endfor %}
-                <br>
             </div>
         </div>
+
+    </main>
+
+    <h3 class="text-centre">health news</h3>
+    <main>
+
+        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                {% for x in health %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="width: 18rem;">
+
+                        <a class="sports-news" href="{{x.href_link}}"><br>
+                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                            <h5 class="card-title">{{x.news_headline}}</h5>
+                        </a>
+                        <div class="card-body">
+
+                            <p class="card-text">{{x.news_descriptions}}</p>
+
+                        </div><br>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </main>
+
+
+    <h3 class="text-centre">Sports news</h3>
+    <main>
+
+        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                {% for x in sports %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="width: 18rem;">
+
+                        <a class="sports-news" href="{{x.href_link}}"><br>
+                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                            <h5 class="card-title">{{x.news_headline}}</h5>
+                        </a>
+                        <div class="card-body">
+
+                            <p class="card-text">{{x.news_descriptions}}</p>
+
+                        </div><br>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </main>
+    <br>
 
 
     </div>

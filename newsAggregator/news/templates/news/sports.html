@@ -1,18 +1,30 @@
 <head>
     <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-{% include 'news/navbar.html' %}
-{% block content %}
-<div>
-    {% for x in sports_news %}
-    <a class="sports-news" href="{{x.href_link}}"><br>
-    <h3>{{x.news_headline}}</h3>
-    <img src="{{x.image_link}}" alt="#">
-    </a>
-       
-        <p>{{x.news_descriptions}}</p>
-        news category : {{x.news_category}}
-    {% endfor %}
-</div>
+{% include 'news/navbar.html' %} {% block content %}
+<main>
+
+    <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+        <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+            {% for x in sports_news %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card" style="width: 18rem;">
+
+                    <a class="sports-news" href="{{x.href_link}}"><br>
+                        <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                        <h5 class="card-title">{{x.news_headline}}</h5>
+                    </a>
+                    <div class="card-body">
+
+                        <p class="card-text">{{x.news_descriptions}}</p>
+
+                    </div><br>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</main>
 {% endblock %}

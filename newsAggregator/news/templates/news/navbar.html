@@ -31,26 +31,28 @@
                 </div>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" method="post">
+            {% csrf_token %}
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            <button type="button" class="btn btn-outline-warning" href="/login">login</button>
+            <button type="button" class="btn btn-outline-warning" href="">
+                <a class="btn" href="{% url 'news:login' %}">login</a></button>
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="btn" href="/logout">Logout</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Welcome, {{user.username}}</a>
                     </li>
 
-                    {% else %}
+                    <!-- {% else %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
-                    </li>
+                    </li> -->
 
                     {% endif %}
                 </ul>

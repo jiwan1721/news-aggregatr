@@ -139,9 +139,9 @@ def logout_request(request):
     return redirect("main:homepage")
 
 def index(request):
-    data_politics = NewsAggre.objects.all().filter(news_category="P")
-    data_health = NewsAggre.objects.all().filter(news_category="H")
-    data_sports = NewsAggre.objects.all().filter(news_category="S")
+    data_politics = NewsAggre.objects.all().filter(news_category="P").order_by('id')[:6]
+    data_health = NewsAggre.objects.all().filter(news_category="H").order_by('id')[:6]
+    data_sports = NewsAggre.objects.all().filter(news_category="S").order_by('id')[:6]
     return render(request,'news/index.html',{
         'politics':data_politics,
         'health':data_health,
