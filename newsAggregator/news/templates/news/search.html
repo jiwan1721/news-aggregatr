@@ -28,4 +28,52 @@
     </div>
 
 </main>
+<!-- <main>
+
+    <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+        <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+            {% for x in headline %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card" style="width: 18rem;">
+
+                    <a class="sports-news" href="{{x.href_link}}"><br>
+                        <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                        <h5 class="card-title">{{x.news_headline}}</h5>
+                    </a>
+                    <div class="card-body">
+
+                        <p class="card-text">{{x.news_descriptions}}</p>
+
+                    </div><br>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</main>
+<main>
+
+    <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+        <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+            {% for x in url %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card" style="width: 18rem;">
+
+                    <a class="sports-news" href="{{x.href_link}}"><br>
+                        <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                        <h5 class="card-title">{{x.news_headline}}</h5>
+                    </a>
+                    <div class="card-body">
+
+                        <p class="card-text">{{x.news_descriptions}}</p>
+
+                    </div><br>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</main> -->
 {% endblock %}

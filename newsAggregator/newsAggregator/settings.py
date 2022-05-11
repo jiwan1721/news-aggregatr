@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'news',
     'django_crontab',
     'crispy_forms',
+    'rest_framework',
 ]
 CRONJOBS = [
-    ('*/10 * * * *','news.cron.my_corn_job')
+    ('*/10 * * * *','news.cron.my_corn_job'),
+    ('*/10 * * * *','news.cron.delete_duplicate')
 ]
 CRISPY_TEMPLATE_PACK= 'uni_form'
 MIDDLEWARE = [
@@ -125,7 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATIC_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 # Default primary key field type

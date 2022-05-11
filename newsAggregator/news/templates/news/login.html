@@ -1,5 +1,21 @@
-{% include "news/navbar.html" %} {% block content %} {% load crispy_forms_tags %}
-<section class="vh-100">
+{% block content %} {% load crispy_forms_tags %}
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<div class="container py-5">
+    <h1>Login</h1>
+   
+    <form method="POST">
+      {% csrf_token %}
+      {{ login_form|crispy }}
+      <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
+</div>
+{% endblock %}
+<!-- <section class="vh-100">
     <div class="container-fluid h-custom">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-9 col-lg-6 col-xl-5">
@@ -12,15 +28,15 @@
                         <p class="lead fw-normal mb-0 me-3">Log in</p>
                     </div>
 
-                    <!-- Email input -->
+                    Email input
                     <div class="form-outline mb-4">
-                        <input type="email" id="form3Example3" class="form-control form-control-lg" placeholder="Enter a valid email address" />
+                        <input type="email" id="form3Example3" class="form-control form-control-lg" placeholder="Enter a valid email address" name="username"/>
                         <label class="form-label" for="form3Example3">Email address</label>
                     </div>
 
-                    <!-- Password input -->
+                    Password input
                     <div class="form-outline mb-3">
-                        <input type="password" id="form3Example4" class="form-control form-control-lg" placeholder="Enter password" />
+                        <input type="password" id="form3Example4" class="form-control form-control-lg" placeholder="Enter password" name="password"/>
                         <label class="form-label" for="form3Example4">Password</label>
                     </div>
 
@@ -33,6 +49,5 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
-{% endblock %}

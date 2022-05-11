@@ -1,106 +1,115 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% include 'news/navbar.html' %} {% load static %}
+    <head>
+        <title></title>
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static 'news/style.css' %}">
+        
+    </head>
+    <body>
+        {% include 'news/navbar.html' %} 
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+            </li>
+            {% endif %}
+          </ul>
+        <!-- <div class="jumbotron">
+            <center>
+                <h1>News Aggregator</h1>
+                <a href="/" class="btn btn-danger">Refresh News</a>
+                </form>
+            </center>
+        </div> -->
+        <h3 class="text-centre">Politics news</h3>
+        <main>
 
-    <script src="{% static 'js/see_more.js' %}"></script>
-</head>
+            <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+                <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                    {% for x in politics %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card" style="width: 18rem;">
 
-<body>
-    <div class="jumbotron">
-        <center>
-            <h1>News Aggregator</h1>
-            <a href="/" class="btn btn-danger">Refresh News</a>
-            </form>
-        </center>
-    </div>
-    <h3 class="text-centre">Politics news</h3>
-    <main>
+                            <a class="sports-news" href="{{x.href_link}}"><br>
+                                <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                                <h5 class="card-title">{{x.news_headline}}</h5>
+                            </a>
+                            <div class="card-body">
 
-        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
-            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
-                {% for x in politics %}
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card" style="width: 18rem;">
+                                <p class="card-text">{{x.news_descriptions}}</p>
 
-                        <a class="sports-news" href="{{x.href_link}}"><br>
-                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
-                            <h5 class="card-title">{{x.news_headline}}</h5>
-                        </a>
-                        <div class="card-body">
-
-                            <p class="card-text">{{x.news_descriptions}}</p>
-
-                        </div><br>
+                            </div><br>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
 
-    </main>
+        </main>
 
-    <h3 class="text-centre">health news</h3>
-    <main>
+        <h3 class="text-centre">health news</h3>
+        <main>
 
-        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
-            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
-                {% for x in health %}
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card" style="width: 18rem;">
+            <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+                <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                    {% for x in health %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card" style="width: 18rem;">
 
-                        <a class="sports-news" href="{{x.href_link}}"><br>
-                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
-                            <h5 class="card-title">{{x.news_headline}}</h5>
-                        </a>
-                        <div class="card-body">
+                            <a class="sports-news" href="{{x.href_link}}"><br>
+                                <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                                <h5 class="card-title">{{x.news_headline}}</h5>
+                            </a>
+                            <div class="card-body">
 
-                            <p class="card-text">{{x.news_descriptions}}</p>
+                                <p class="card-text">{{x.news_descriptions}}</p>
 
-                        </div><br>
+                            </div><br>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
 
-    </main>
+        </main>
+        <h3 class="text-centre">Sports news</h3>
+        <main>
 
+            <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
+                <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+                    {% for x in sports %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card" style="width: 18rem;">
 
-    <h3 class="text-centre">Sports news</h3>
-    <main>
+                            <a class="sports-news" href="{{x.href_link}}"><br>
+                                <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
+                                <h5 class="card-title">{{x.news_headline}}</h5>
+                            </a>
+                            <div class="card-body">
 
-        <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
-            <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
-                {% for x in sports %}
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card" style="width: 18rem;">
+                                <p class="card-text">{{x.news_descriptions}}</p>
 
-                        <a class="sports-news" href="{{x.href_link}}"><br>
-                            <img class="card-img-top" src="{{x.image_link}}" alt="Card image cap">
-                            <h5 class="card-title">{{x.news_headline}}</h5>
-                        </a>
-                        <div class="card-body">
-
-                            <p class="card-text">{{x.news_descriptions}}</p>
-
-                        </div><br>
+                            </div><br>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
+
+        </main>
+        <br>
+
+
         </div>
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
 
-    </main>
-    <br>
-
-
-    </div>
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
 
 </html>

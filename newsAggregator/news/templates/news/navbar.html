@@ -12,16 +12,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'news:index' %}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'news:index' %}">Home </a>
             </li>
             <!-- <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
             </li> -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            news Category
-          </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    news Category
+                </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'news:health' %}">health</a>
                     <a class="dropdown-item" href="{% url 'news:sports' %}">sports</a>
                     <a class="dropdown-item" href="#">weather</a>
@@ -33,11 +33,15 @@
         </ul>
         <form action="{% url 'news:search' %}" class="form-inline my-2 my-lg-0" method="post">
             {% csrf_token %}
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+
+            {% if user.is_authenticated %}
             <button type="button" class="btn btn-outline-warning" href="">
-                <a class="btn" href="{% url 'news:login' %}">login</a></button>
-            <div class="collapse navbar-collapse" id="navbarText">
+                <a class="btn" href="{% url 'news:logout' %}">logout</a></button>
+            {% endif %}
+
+            <!-- <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
 
@@ -48,15 +52,15 @@
                         <a class="nav-link" href="#">Welcome, {{user.username}}</a>
                     </li>
 
-                    <!-- {% else %}
+                    {% else %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
-                    </li> -->
+                    </li>
 
                     {% endif %}
                 </ul>
-            </div>
+            </div> -->
         </form>
     </div>
 </nav>
