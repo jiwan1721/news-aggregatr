@@ -150,14 +150,37 @@ def index(request):
         })
 
 def politics_news(request):
-    data = NewsAggre.objects.all().filter(news_category="P")
+    data = NewsAggre.objects.all().filter(news_category="P").order_by('id')[:12]
     
     return render(request, "news/political.html",{'political_news':data})
 
 def sports_news(request):
-    data = NewsAggre.objects.all().filter(news_category="S")
+    data = NewsAggre.objects.all().filter(news_category="S").order_by('id')[:12]
     return render(request, "news/sports.html",{'sports_news':data})
 
 def health_news(request):
-    data = NewsAggre.objects.all().filter(news_category="H")
+    data = NewsAggre.objects.all().filter(news_category="H").order_by('id')[:12]
     return render(request, 'news/health.html',{'health_news':data})
+
+from django.db.models import Q
+def search(request):
+
+    results = []
+
+    if request.method == "POST":
+
+        searched_text = request.POST.get('search')
+
+        if searched_text == '':
+
+            searched_text = 'None'
+
+        results = NewsAggre.objects.filter(
+            news_headline__startswith=searched_text)
+            #   | Q(news_descriptions__icontains=searched_text) 
+            # | Q(news_category__icontains=searched_text)
+           
+            #   | Q(href_link__icontains=searched_text)
+                        #  | Q(image_link__icontains=searched_text)
+
+    return render(request, 'news/search.html', {'searched_text': searched_text, 'results': results})

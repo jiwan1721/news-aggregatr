@@ -9,5 +9,6 @@ urlpatterns= [
     path("logout", views.logout_request, name= "logout"),
     path("politics",views.politics_news,name ="politics"),
     path('sports',views.sports_news,name = 'sports'),
-    path('health',views.health_news,name = 'health')
+    path('health',views.health_news,name = 'health'),
+    path('search',views.search,name = 'search'),
 ]
