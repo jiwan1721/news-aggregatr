@@ -170,7 +170,12 @@ def search(request):
         #     searched_text = 'None'
         
         
-        results = NewsAggre.objects.all().filter(Q(news_category=searched_text)|Q(news_headline__icontains=searched_text)|Q(href_link__icontains=searched_text)).order_by('id')[:12]
+        results = NewsAggre.objects.all().filter(
+            Q(news_category=searched_text)
+            |Q(news_headline__icontains=searched_text)
+            |Q(href_link__icontains=searched_text)
+            |Q(news_descriptions__icontains=searched_text)
+       ).order_by('id')[:12]
 
        
        
@@ -188,3 +193,15 @@ def search(request):
                     })
                     #     'headline':results_headline,
                     # 'url':results_url
+
+
+from .serializers import NewsAggreSerializer
+from rest_framework import generics
+                    
+class NewsList(generics.ListCreateAPIView):
+    queryset = NewsAggre.objects.all()
+    serializer_class = NewsAggreSerializer
+    
+class NewsUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = NewsAggre.objects.all()
+    serializer_class = NewsAggreSerializer
