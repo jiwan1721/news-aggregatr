@@ -197,11 +197,14 @@ def search(request):
 
 from .serializers import NewsAggreSerializer
 from rest_framework import generics
-                    
+from rest_framework import filters                    
 class NewsList(generics.ListCreateAPIView):
     queryset = NewsAggre.objects.all()
     serializer_class = NewsAggreSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['news_headline']
     
 class NewsUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = NewsAggre.objects.all()
     serializer_class = NewsAggreSerializer
+    
