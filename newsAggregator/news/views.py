@@ -1,85 +1,12 @@
 from django.shortcuts import render,redirect
 import requests
-from bs4 import BeautifulSoup
 from news.aggregator import *
-from .form import NewUserForm
+
 import re
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from . import cron
 from . import utils
 from django.contrib.auth.decorators import login_required
-# Create your views here.
-# r = requests.get("https://ekantipur.com/sports")
-
-# soup = BeautifulSoup(r.content)
-# newsdiv = soup.findAll("div",{"class":"teaser offset"})
-
-# ekatpur = []
-
-# for n in newsdiv:
-#     print(n.text)
-
-
-
-# r1 = requests.get("https://kathmandupost.com/")
-
-# soup1 = BeautifulSoup(r1.content)
-# newh2 = soup1.findAll('h2')
-# for n in newh2:
-#     print(n.text)
-
-# for n in news_ekantpur:
-    # print(news_ekantpur)
-    # print(n.h2)
-    # link = n.a['href']
-    # ekantipur_news.append(n.text)
-    
-    # all_link.add(link)
-    # if(n.get('href')!='#'):
-    #     link_text = ("https://ekantipur.com/"+n.get('href'))
-    #     all_link.add(link_text)
-    #     print(all_link)
-
-# ['https://www.nepalnews.com/s/politics','https://www.nepalnews.com/s/sports','https://www.nepalnews.com/s/business']
-# url = "https://www.nepalnews.com/s/politics"
-# request_news= requests.get(url)
-# html_news = request_news.content
-# news_soup = BeautifulSoup(html_news,'html.parser')
-# news_scrap = news_soup.find_all('div',class_ = 'uk-grid-margin uk-first-column')
-# # for link in news_scrap:
-#     aggre = NewsAggre()
-#     aggre.news_headline =  link.a.text
-#     aggre.news_image = link.img['src']
-#     aggre.href_link = link.a['href']
-#     aggre.news_category='P'
-#     # data = NewsAggre.objects.filter(category='P').filter(news_headline =aggre.news_headline)
-#     aggre.save()
-
-# r = requests.get("https://kathmandupost.com/politics")
-# soup = BeautifulSoup(r.content,'html.parser')
-# article =soup.find_all('article')
-# url_host = utils.get_host_name("https://kathmandupost.com/politics")
-# # for content in article[:5]:
-#     aggre = NewsAggre()
-#     aggre.news_headline =  content.h3.text
-#     url = content.img["data-src"]
-#     aggre.image_link = url
-    
-#     aggre.href_link = url_host + content.a["href"]
-#     aggre.news_category="P"
-#     data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
-#     aggre.save()
- 
-    # print('href------>',content.a['href'])
-    # print('img--->',content.p.text)
-    # print('figure---',content.img['data-src'])
-
-
-
-
-
-# news':news_set
 
 from .form import NewUserForm
 from django.contrib.auth import login,logout,authenticate
@@ -197,14 +124,77 @@ def search(request):
 
 from .serializers import NewsAggreSerializer
 from rest_framework import generics
-from rest_framework import filters                    
+from rest_framework import filters
+from rest_framework import permissions
+from rest_framework import viewsets
+
+from rest_framework.decorators import api_view,renderer_classes
+from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework import renderers
+
+from django.shortcuts import get_object_or_404
+
+
+                    
 class NewsList(generics.ListCreateAPIView):
     queryset = NewsAggre.objects.all()
     serializer_class = NewsAggreSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['news_headline']
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(),pk = self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        self.check_object_permissions(self.request, filter_backends)
+        self.check_object_permissions(self.request, search_fields)
+
+        return obj
+    def has_object_permission(self,request,view,obj):
+        if request.methode in permissions.SAFE_METHODS:
+            return True
+        return object.NewsAggre == request.user
     
+# class NewsList(viewsets.ModelViewSet):
+#     queryset = NewsAggre.objects.all()
+#     serializer_class = NewsAggreSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['news_headline']
+#     def get_object(self):
+#         obj = get_object_or_404(self.get_queryset(),pk = self.kwargs["pk"])
+#         self.check_object_permissions(self.request, obj)
+#         return obj
+
 class NewsUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = NewsAggre.objects.all()
     serializer_class = NewsAggreSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+#for @rendere_classes we have to import in decorators
+
+
+@api_view(['GET'])
+@renderer_classes([JSONRenderer,BrowsableAPIRenderer])
+def api_root(request,format=None):
+    return Response({
+        'news-aggregator':reverse('news:news_info',request=request,format=None),
+        'newsAuthExample':reverse('news:example-view',request=request,format=None),
+    })
     
+from rest_framework.authentication import SessionAuthentication,BaseAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+class exampleView(APIView):
+    authentication_classes = [SessionAuthentication,BaseAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self,request,format=None):
+        content = {
+            'user':str(request.user),
+            'auth':str(request.auth), 
+        }
+        return Response(content)
