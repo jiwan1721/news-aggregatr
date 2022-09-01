@@ -1,16 +1,24 @@
 from django.shortcuts import render,redirect
-import requests
 from news.aggregator import *
-
-import re
 from django.contrib.auth.forms import AuthenticationForm
-from . import cron
-from . import utils
 from django.contrib.auth.decorators import login_required
-
 from .form import NewUserForm
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
+from django.db.models import Q
+from .serializers import NewsAggreSerializer
+from rest_framework import generics
+from rest_framework import filters
+from rest_framework import permissions
+from rest_framework.decorators import api_view,renderer_classes
+from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from django.shortcuts import get_object_or_404
+from rest_framework.authentication import SessionAuthentication,BaseAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 def register_request(request):
 	if request.method == "POST":
@@ -23,8 +31,6 @@ def register_request(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render (request=request, template_name="news/register.html", context={"register_form":form})
-
-
 
 
 def login_request(request):
@@ -56,7 +62,6 @@ def index(request):
     data_politics = NewsAggre.objects.all().filter(news_category="P").order_by('id')[:6]
     data_health = NewsAggre.objects.all().filter(news_category="H").order_by('id')[:6]
     data_sports = NewsAggre.objects.all().filter(news_category="S").order_by('id')[:6]
-    # import ipdb;ipdb.set_trace()
     context = {
         'politics':data_politics,
         'health':data_health,
@@ -78,66 +83,25 @@ def health_news(request):
     data = NewsAggre.objects.all().filter(news_category="H").order_by('id')[:12]
     return render(request, 'news/health.html',{'health_news':data})
 
-from django.db.models import Q
-from . import utils
 @login_required
 def search(request):
-    # news = NewsAggre()
-    # url = news.href_link.first
-    # url_host_name = utils.get_netloc(url)
-    # print("===>>",url_host_name)
-    # results = []
+    results=[]
     if request.method == "POST":
-
         searched_text = request.POST.get('search')
-        print("searched text",searched_text)
-
-        # if searched_text == '':
-
-        #     searched_text = 'None'
-        
-        
         results = NewsAggre.objects.all().filter(
             Q(news_category=searched_text)
             |Q(news_headline__icontains=searched_text)
             |Q(href_link__icontains=searched_text)
             |Q(news_descriptions__icontains=searched_text)
        ).order_by('id')[:12]
+    return render(
+            request,
+            'news/search.html',
+            {
+            'results': results
+            }
+        )
 
-       
-       
-       
-       
-        # results_headline = NewsAggre.objects.all().filter(news_headline__icontains=searched_text).order_by('id')[:12]
-        # results_url = NewsAggre.objects.all().filter(href_link__icontains=searched_text).order_by('id')[:12]
-            
-
-    return render(request, 'news/search.html',
-                  {
-                    'searched_text': searched_text,
-                    'results': results
-
-                    })
-                    #     'headline':results_headline,
-                    # 'url':results_url
-
-
-from .serializers import NewsAggreSerializer
-from rest_framework import generics
-from rest_framework import filters
-from rest_framework import permissions
-from rest_framework import viewsets
-
-from rest_framework.decorators import api_view,renderer_classes
-from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework import renderers
-
-from django.shortcuts import get_object_or_404
-
-
-                    
 class NewsList(generics.ListCreateAPIView):
     queryset = NewsAggre.objects.all()
     serializer_class = NewsAggreSerializer
@@ -147,8 +111,8 @@ class NewsList(generics.ListCreateAPIView):
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(),pk = self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
-        self.check_object_permissions(self.request, filter_backends)
-        self.check_object_permissions(self.request, search_fields)
+        self.check_object_permissions(self.request, self.filter_backends)
+        self.check_object_permissions(self.request, self.search_fields)
 
         return obj
     def has_object_permission(self,request,view,obj):
@@ -174,8 +138,6 @@ class NewsUpdate(generics.RetrieveUpdateDestroyAPIView):
 
 
 #for @rendere_classes we have to import in decorators
-
-
 @api_view(['GET'])
 @renderer_classes([JSONRenderer,BrowsableAPIRenderer])
 def api_root(request,format=None):
@@ -183,11 +145,6 @@ def api_root(request,format=None):
         'news-aggregator':reverse('news:news_info',request=request,format=None),
         'newsAuthExample':reverse('news:example-view',request=request,format=None),
     })
-    
-from rest_framework.authentication import SessionAuthentication,BaseAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 class exampleView(APIView):
     authentication_classes = [SessionAuthentication,BaseAuthentication]

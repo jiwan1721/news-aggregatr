@@ -8,6 +8,9 @@
 
     <div class="container-fluid bg-trasparent my-4 p-5" style="position: relative;">
         <div class="row g-5 row-cols-4 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-4">
+            {%if not results%}
+               <h1>sorry we are unable to find that you have search</h1>
+            {%endif%}
             {% for x in results %}
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card" style="width: 18rem;">
