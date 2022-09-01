@@ -41,8 +41,9 @@ def my_corn_job():
             elif url_parse.path =='/opinion':
                 aggre.news_category="O"
             else:
-                aggre.news_category="R"  
-            aggre.save()    
+                aggre.news_category="R"
+            if not NewsAggre.objects.filter(href_link=aggre.href_link).exists(): 
+                aggre.save()    
             # data = NewsAggre.objects.filter(news_headline =aggre.news_headline)
             
             
@@ -67,9 +68,9 @@ for site in ekantipur:
         elif url_parse.path =='/health':
             aggre.news_category="H"
         else:
-            aggre.news_category="R" 
-        #data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
-        aggre.save()              
+            aggre.news_category="R"
+        if not NewsAggre.objects.filter(href_link=aggre.href_link).exists(): 
+                aggre.save()
     
     for site in himalayan:
             r = requests.get(site)
@@ -92,11 +93,11 @@ for site in ekantipur:
                     aggre.news_category="H"
                 else:
                     aggre.news_category="R"  
-                #data = NewsAggre.objects.filter(news_category='P').filter(news_headline =aggre.news_headline)
-                aggre.save()              
+                if not NewsAggre.objects.filter(href_link=aggre.href_link).exists(): 
+                    aggre.save()              
     
 
-def delete_duplicate():
-    for row in NewsAggre.objects.all().reverse():
-        if NewsAggre.objects.filter(news_headline=row.news_headline).count()>1:
-            row.delete()
+# def delete_duplicate():
+#     for row in NewsAggre.objects.all().reverse():
+#         if NewsAggre.objects.filter(news_headline=row.news_headline).count()>1:
+#             row.delete()
